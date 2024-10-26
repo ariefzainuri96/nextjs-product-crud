@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+    margin: 0;
+    padding: 0;
+    scroll-behavior: smooth;
+}
+
+@layer components {
+    .product-input {
+        @apply w-full rounded-lg border-[1px] border-slate-200 p-2 outline-none;
+    }
+
+    .btn-outlined {
+        @apply rounded-lg border-[1px] border-[#D0D5DD] bg-transparent px-2 py-[10px] text-[16px] font-semibold text-[#344054] hover:bg-[#D0D5DD];
+    }
+
+    .btn-filled {
+        @apply rounded-lg px-2 py-[10px] text-[16px] font-semibold text-[#fff];
+    }
+
+    .btn-filled-primary {
+        @apply rounded-lg bg-[#D92D20] px-2 py-[10px] text-[16px] font-semibold text-[#fff] hover:bg-[#ff392b];
+    }
+}
+
+@layer base {
+    :root {
+        --radius: 0.5rem;
+    }
+}
