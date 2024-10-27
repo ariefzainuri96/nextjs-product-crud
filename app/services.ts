@@ -4,12 +4,21 @@ import { decrypt } from "@/auth_lib";
 import { revalidatePath } from "next/cache";
 import { isRedirectError } from "next/dist/client/components/redirect";
 import { cookies } from "next/headers";
-import { RedirectType, redirect } from "next/navigation";
 import { ProductTable } from "@/db/schema";
 import { db } from "@/db";
 import { eq } from "drizzle-orm";
 
 export type TProduct = typeof ProductTable.$inferSelect;
+
+export async function getAllProducts() {
+    try {
+        const products: TProduct[] = await db.select().from(ProductTable);
+
+        return products;
+    } catch (error) {
+        throw new Error("Error fetching products");
+    }
+}
 
 export async function handleUpdateOrAdd(prevState: any, formData: FormData) {
     const currentUser = cookies().get("currentUser")?.value;
@@ -18,7 +27,7 @@ export async function handleUpdateOrAdd(prevState: any, formData: FormData) {
 
     try {
         const dataCookies = await decrypt(currentUser);
-        const id = formData.get("product_id");
+        const id = formData.get("productId");
 
         if (id) {
             await db

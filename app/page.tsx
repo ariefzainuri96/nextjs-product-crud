@@ -1,7 +1,8 @@
 import { Suspense } from "react";
-import { FabAddProduct } from "./(components)/fab-add-product";
 import { ProductSections } from "./(sections)/product-section";
 import ErrorBoundary from "@/components/error-boundary";
+import { AddProductDialog } from "./(components)/add-product-dialog";
+import { PlusIcon } from "lucide-react";
 
 type SearchParamProps = {
     searchParams: Record<string, string> | null | undefined;
@@ -18,14 +19,18 @@ export default async function Home({ searchParams }: SearchParamProps) {
                         <div className="flex flex-col items-start px-4">
                             <ErrorBoundary>
                                 <Suspense fallback={"Loading..."}>
-                                    <ProductSections />
+                                    <ProductSections className="mt-4" />
                                 </Suspense>
                             </ErrorBoundary>
                         </div>
                     </div>
                 </div>
                 {/* index 1 */}
-                <FabAddProduct />
+                <AddProductDialog>
+                    <div className="absolute bottom-4 right-4 z-10 cursor-pointer rounded-full bg-black p-3">
+                        <PlusIcon className="size-6 text-white" />
+                    </div>
+                </AddProductDialog>
             </div>
         </div>
     );

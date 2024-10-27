@@ -1,42 +1,51 @@
 "use client";
 
-import { CustomInput } from "@/components/custom-input";
-import { Button } from "@/components/ui/button";
 import {
     Dialog,
     DialogContentWithoutX,
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
-import { PlusIcon } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useFormState } from "react-dom";
-import { handleUpdateOrAdd } from "../services";
+import { handleUpdateOrAdd, TProduct } from "../services";
+import { CustomInput } from "@/components/custom-input";
+import { Button } from "@/components/ui/button";
 
-export const FabAddProduct = () => {
+type AddProductDialogProps = {
+    children: React.ReactNode;
+    product?: TProduct;
+    onDialogClosed?: () => void;
+};
+
+export const AddProductDialog = ({
+    children,
+    product,
+    onDialogClosed,
+}: AddProductDialogProps) => {
     const [open, setOpen] = useState(false);
     const [response, dispatch] = useFormState(handleUpdateOrAdd, null);
 
     useEffect(() => {
         if (response?.status === 200) {
             setOpen(false);
+            if (onDialogClosed) onDialogClosed();
         }
     }, [response]);
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-                <div className="absolute bottom-4 right-4 z-10 cursor-pointer rounded-full bg-black p-3">
-                    <PlusIcon className="size-6 text-white" />
-                </div>
-            </DialogTrigger>
+            <DialogTrigger asChild>{children}</DialogTrigger>
             <DialogContentWithoutX className="rounded-md sm:max-w-[425px]">
-                <DialogTitle>Add Product</DialogTitle>
+                <DialogTitle>
+                    {product ? "Edit Product" : "Add Product"}
+                </DialogTitle>
                 <form action={dispatch} className="flex flex-col items-start">
                     <CustomInput
                         label={"Product Name"}
                         id="name"
                         name="name"
+                        defaultValue={product?.name}
                         className="w-full"
                         placeholder="ex: Shampoo"
                     />
@@ -44,6 +53,7 @@ export const FabAddProduct = () => {
                         label={"Product Price"}
                         id="price"
                         name="price"
+                        defaultValue={product?.price}
                         className="mt-2 w-full"
                         placeholder="ex: 1000"
                     />
@@ -51,8 +61,16 @@ export const FabAddProduct = () => {
                         label={"Product Quantity"}
                         id="quantity"
                         name="quantity"
+                        defaultValue={product?.quantity}
                         className="mt-2 w-full"
                         placeholder="ex: 1"
+                    />
+                    <CustomInput
+                        label={"Product Quantity"}
+                        id="productId"
+                        name="productId"
+                        defaultValue={product?.id}
+                        className="hidden"
                     />
                     <div className="mt-4 flex w-full flex-row justify-end gap-2">
                         <Button
@@ -64,7 +82,9 @@ export const FabAddProduct = () => {
                         >
                             Close
                         </Button>
-                        <Button type="submit">Add</Button>
+                        <Button type="submit">
+                            {product ? "Update" : "Add"}
+                        </Button>
                     </div>
                 </form>
             </DialogContentWithoutX>

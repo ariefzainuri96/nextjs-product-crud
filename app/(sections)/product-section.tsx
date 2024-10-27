@@ -1,14 +1,17 @@
 import React from "react";
-import { TProduct } from "../services";
-import { db } from "@/db";
-import { ProductTable } from "@/db/schema";
+import { getAllProducts, TProduct } from "../services";
 import { ProductItem } from "../(components)/product-item";
+import { twMerge } from "tailwind-merge";
 
-export const ProductSections = async () => {
-    const products: TProduct[] = await db.select().from(ProductTable);
+type ProductSectionProps = {
+    className?: string;
+};
+
+export const ProductSections = async ({ className }: ProductSectionProps) => {
+    const products: TProduct[] = await getAllProducts();
 
     return (
-        <div className="grid grid-cols-3 gap-2">
+        <div className={twMerge("grid w-full grid-cols-4 gap-4", className)}>
             {products.map((item) => {
                 return <ProductItem key={item.id} product={item} />;
             })}
