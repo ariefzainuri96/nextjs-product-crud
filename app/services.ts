@@ -61,31 +61,16 @@ export async function handleUpdateOrAdd(prevState: any, formData: FormData) {
     }
 }
 
-// export async function deleteProduct(
-//     prevState: any,
-//     formData: FormData,
-// ) {
-//     const currentUser = cookies().get("currentUser")?.value;
+export async function deleteProduct(productId: string) {
+    const currentUser = cookies().get("currentUser")?.value;
 
-//     if (!currentUser) return { status: 401 };
+    if (!currentUser) return { status: 401 };
 
-//     try {
-//         const dataCookies = await decrypt(currentUser);
-//         const id = formData.get('product_id')
-
-//         await fetch(`${BASE_URL}/api/products${id && `/${id}`}`, {
-//             headers: {
-//                 "Content-Type": "application/json",
-//                 Authorization: `Bearer ${dataCookies.token}`,
-//             },
-//             method: "DELETE",
-//         });
-
-//         revalidatePath('/')
-//         redirect('/', RedirectType.replace)
-//     } catch (error) {
-//         console.log(error);
-//         if (isRedirectError(error)) throw error
-//         return { message: `${error}` };
-//     }
-// }
+    try {
+        await db.delete(ProductTable).where(eq(ProductTable.id, productId));
+    } catch (error) {
+        console.log(error);
+    } finally {
+        revalidatePath("/");
+    }
+}

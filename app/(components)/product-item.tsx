@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { TProduct } from "../services";
+import { deleteProduct, TProduct } from "../services";
 import {
     Popover,
     PopoverContent,
@@ -59,6 +59,7 @@ export const ProductItem = ({ product }: ProductItemProps) => {
 
                                             switch (item.toLowerCase()) {
                                                 case "delete":
+                                                    deleteProduct(product.id);
                                                     setPopOverOpen(false);
                                                     break;
                                                 default:
