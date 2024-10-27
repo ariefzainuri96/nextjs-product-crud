@@ -9,7 +9,7 @@ export const UserTable = pgTable("user", {
 export const ProductTable = pgTable("product", {
     id: uuid("id").primaryKey().defaultRandom(),
     name: varchar("name", { length: 255 }).notNull(),
-    price: numeric("price").notNull(),
+    price: varchar("price", { length: 255 }).notNull(),
     quantity: integer("quantity").notNull(),
     userId: uuid("userId")
         .references(() => UserTable.id)

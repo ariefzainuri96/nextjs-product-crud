@@ -32,7 +32,7 @@ export async function authenticate(prevState: any, formData: FormData) {
             return { status: 401, message: "Invalid email or password" };
         }
 
-        await setCookies(email);
+        await setCookies(email, user[0].id);
     } catch (error) {
         console.log(error);
 
@@ -58,7 +58,7 @@ export async function register(prevState: any, formData: FormData) {
             await db.select().from(UserTable).where(eq(UserTable.email, email))
         )[0];
 
-        await setCookies(user.email);
+        await setCookies(user.email, user.id);
     } catch (error) {
         console.log(error);
 
@@ -85,9 +85,10 @@ export async function decrypt(input: string): Promise<any> {
     return payload;
 }
 
-async function setCookies(email: string) {
+async function setCookies(email: string, userId: string) {
     const user = {
         email: email,
+        userId: userId,
     };
     // 60000 millisecond => 1 minute
     const expires = new Date(Date.now() + 120 * 60000);

@@ -1,16 +1,16 @@
 "use client";
 
 import { authenticate } from "@/auth_lib";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useFormState, useFormStatus } from "react-dom";
 
 const Login = () => {
     const [error, dispatch] = useFormState(authenticate, undefined);
+    const router = useRouter();
 
     return (
-        <main className="flex h-screen w-screen flex-col items-center justify-center bg-blue-100">
+        <div className="flex h-screen w-screen flex-col items-center justify-center bg-blue-100">
             <div className="mx-4 flex flex-col items-start rounded-md bg-white p-4">
-                <h1>Login</h1>
                 <form className="mt-4 max-w-[600px]" action={dispatch}>
                     <input
                         required
@@ -30,12 +30,16 @@ const Login = () => {
                 </form>
                 <span className="mt-4 self-center">
                     {"Don't"} have an account?{" "}
-                    <Link
-                        href={"/register"}
+                    <span
+                        onClick={(e) => {
+                            e.preventDefault();
+
+                            router.push("/register");
+                        }}
                         className="cursor-pointer font-semibold text-blue-500 underline"
                     >
                         Register
-                    </Link>
+                    </span>
                 </span>
                 {error && (
                     <span className="mt-2 text-sm font-normal text-red-500">
@@ -43,7 +47,7 @@ const Login = () => {
                     </span>
                 )}
             </div>
-        </main>
+        </div>
     );
 };
 

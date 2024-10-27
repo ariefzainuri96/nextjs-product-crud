@@ -4,6 +4,9 @@ import { cookies } from "next/headers";
 export function middleware(request: NextRequest) {
     const currentUser = cookies().get("currentUser")?.value;
 
+    const requestHeaders = new Headers(request.headers);
+    requestHeaders.set("x-pathname", request.nextUrl.pathname);
+
     // redirect to dashboard if cookies is active
     if (currentUser && !request.nextUrl.pathname.startsWith("/")) {
         return NextResponse.redirect(new URL("/", request.url));
@@ -17,6 +20,12 @@ export function middleware(request: NextRequest) {
             return NextResponse.redirect(new URL("/login", request.url));
         }
     }
+
+    // return NextResponse.next({
+    //     request: {
+    //         headers: requestHeaders,
+    //     },
+    // });
 }
 
 export const config = {

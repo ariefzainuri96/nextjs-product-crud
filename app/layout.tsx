@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { HomeHeader } from "./(components)/home-header";
+import { headers } from "next/headers";
+import { twMerge } from "tailwind-merge";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,11 +17,24 @@ export default function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+    const headersList = headers();
+    const activePath = headersList.get("next-url");
+    const hiddenHeaderPath: string[] = ["/login", "/register"];
+
+    const showHeader = !hiddenHeaderPath.includes(activePath ?? "");
+
     return (
         <html lang="en">
             <body className="h-screen w-screen overflow-hidden">
-                <HomeHeader />
-                <div className="h-full w-full pt-[3.5rem]">{children}</div>
+                {showHeader && <HomeHeader />}
+                <div
+                    className={twMerge(
+                        "h-full w-full",
+                        showHeader && "pt-[3.5rem]",
+                    )}
+                >
+                    {children}
+                </div>
             </body>
         </html>
     );
