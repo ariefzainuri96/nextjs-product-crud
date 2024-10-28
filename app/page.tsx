@@ -3,6 +3,7 @@ import { ProductSections } from "./(sections)/product-section";
 import ErrorBoundary from "@/components/error-boundary";
 import { AddProductDialog } from "./(components)/add-product-dialog";
 import { PlusIcon } from "lucide-react";
+import { ProductSkeleton } from "./(components)/product-item-skeleton";
 
 type SearchParamProps = {
     searchParams: Record<string, string> | null | undefined;
@@ -10,16 +11,16 @@ type SearchParamProps = {
 
 export default async function Home({ searchParams }: SearchParamProps) {
     return (
-        <div className="h-full w-full bg-red-50">
+        <div className="h-full w-full">
             {/* stack */}
             <div className="relative h-full w-full">
                 {/* index 0 */}
                 <div className="relative z-0 h-full w-full overflow-hidden">
                     <div className="h-full w-full overflow-y-auto">
-                        <div className="flex flex-col items-start px-4">
+                        <div className="flex flex-col items-start p-4">
                             <ErrorBoundary>
-                                <Suspense fallback={"Loading..."}>
-                                    <ProductSections className="mt-4" />
+                                <Suspense fallback={<ProductSkeleton />}>
+                                    <ProductSections />
                                 </Suspense>
                             </ErrorBoundary>
                         </div>

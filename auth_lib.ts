@@ -3,7 +3,10 @@
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { SignJWT, jwtVerify } from "jose";
-import { isRedirectError } from "next/dist/client/components/redirect";
+import {
+    isRedirectError,
+    RedirectType,
+} from "next/dist/client/components/redirect";
 import { db } from "./db";
 import { UserTable } from "./db/schema";
 import { eq } from "drizzle-orm";
@@ -31,6 +34,8 @@ export async function authenticate(prevState: any, formData: FormData) {
         if (!bcrypt.compareSync(password, user[0].password)) {
             return { status: 401, message: "Invalid email or password" };
         }
+
+        console.log(user[0]);
 
         await setCookies(email, user[0].id);
     } catch (error) {
@@ -94,4 +99,10 @@ async function setCookies(email: string, userId: string) {
     const expires = new Date(Date.now() + 120 * 60000);
     const session = await encrypt(user, expires);
     cookies().set("currentUser", session, { expires, httpOnly: true }); // httpOnly true -> we can only get cookies in server side
+}
+
+export async function logout() {
+    cookies().delete("currentUser");
+
+    redirect("/login", RedirectType.replace);
 }

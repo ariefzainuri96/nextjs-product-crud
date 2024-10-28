@@ -5,7 +5,7 @@ export function middleware(request: NextRequest) {
     const currentUser = cookies().get("currentUser")?.value;
 
     const requestHeaders = new Headers(request.headers);
-    requestHeaders.set("x-pathname", request.nextUrl.pathname);
+    requestHeaders.set("x-url", request.url);
 
     // redirect to dashboard if cookies is active
     if (currentUser && !request.nextUrl.pathname.startsWith("/")) {
@@ -21,11 +21,12 @@ export function middleware(request: NextRequest) {
         }
     }
 
-    // return NextResponse.next({
-    //     request: {
-    //         headers: requestHeaders,
-    //     },
-    // });
+    return NextResponse.next({
+        request: {
+            // Apply new request headers
+            headers: requestHeaders,
+        },
+    });
 }
 
 export const config = {

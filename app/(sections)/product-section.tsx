@@ -5,10 +5,14 @@ import { twMerge } from "tailwind-merge";
 
 type ProductSectionProps = {
     className?: string;
+    openFrom?: "profile" | "dashboard";
 };
 
-export const ProductSections = async ({ className }: ProductSectionProps) => {
-    const products: TProduct[] = await getAllProducts();
+export const ProductSections = async ({
+    className,
+    openFrom = "dashboard",
+}: ProductSectionProps) => {
+    const products: TProduct[] = await getAllProducts(openFrom === "dashboard");
 
     return (
         <div className={twMerge("grid w-full grid-cols-4 gap-4", className)}>

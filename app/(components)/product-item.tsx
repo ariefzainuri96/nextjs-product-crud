@@ -16,12 +16,12 @@ type ProductItemProps = {
 
 export const ProductItem = ({ product }: ProductItemProps) => {
     const [popOverOpen, setPopOverOpen] = useState(false);
-
     const menus = ["Edit", "Delete"];
+
     return (
         <div className="flex flex-col items-start gap-2 rounded-md p-4 shadow-md">
             <div className="flex w-full flex-row items-center gap-2">
-                <span className="line-clamp-1 flex-1 overflow-ellipsis">
+                <span className="line-clamp-1 flex-1 overflow-ellipsis font-semibold">
                     {product.name}
                 </span>
                 <Popover open={popOverOpen} onOpenChange={setPopOverOpen}>

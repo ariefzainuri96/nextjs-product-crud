@@ -5,14 +5,34 @@ import { revalidatePath } from "next/cache";
 import { isRedirectError } from "next/dist/client/components/redirect";
 import { cookies } from "next/headers";
 import { ProductTable } from "@/db/schema";
-import { db } from "@/db";
 import { eq } from "drizzle-orm";
+import { db } from "@/db/db";
+import { delay } from "@/helper";
 
 export type TProduct = typeof ProductTable.$inferSelect;
 
-export async function getAllProducts() {
+export async function getAllProducts(isGetAllProducts: boolean = true) {
     try {
-        const products: TProduct[] = await db.select().from(ProductTable);
+        var products: TProduct[] = [];
+
+        await delay(1500);
+
+        if (isGetAllProducts) {
+            products = await db.select().from(ProductTable);
+        } else {
+            console.log("get user products");
+
+            const currentUser = cookies().get("currentUser")?.value;
+
+            if (!currentUser) throw new Error("Not logged in");
+
+            const dataCookies = await decrypt(currentUser);
+
+            products = await db
+                .select()
+                .from(ProductTable)
+                .where(eq(ProductTable.userId, dataCookies.userId));
+        }
 
         return products;
     } catch (error) {

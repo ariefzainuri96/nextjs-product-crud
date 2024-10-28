@@ -5,7 +5,9 @@ import { HomeHeader } from "./(components)/home-header";
 import { headers } from "next/headers";
 import { twMerge } from "tailwind-merge";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({
+    subsets: ["latin"],
+});
 
 export const metadata: Metadata = {
     title: "Create Next App",
@@ -18,14 +20,19 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     const headersList = headers();
-    const activePath = headersList.get("next-url");
-    const hiddenHeaderPath: string[] = ["/login", "/register"];
+    const activePath = (headersList.get("x-url") ?? "").split("/").pop();
+
+    const hiddenHeaderPath: string[] = ["login", "register"];
 
     const showHeader = !hiddenHeaderPath.includes(activePath ?? "");
 
     return (
         <html lang="en">
-            <body className="h-screen w-screen overflow-hidden">
+            <body
+                className={
+                    inter.className + " h-screen w-screen overflow-hidden"
+                }
+            >
                 {showHeader && <HomeHeader />}
                 <div
                     className={twMerge(
