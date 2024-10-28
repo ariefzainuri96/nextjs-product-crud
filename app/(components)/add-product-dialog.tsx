@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import React, { useEffect, useState } from "react";
 import { useFormState } from "react-dom";
-import { handleUpdateOrAdd, TProduct } from "../services";
+import { handleUpdateOrAdd, TProduct } from "../actions";
 import { CustomInput } from "@/components/custom-input";
 import { Button } from "@/components/ui/button";
 

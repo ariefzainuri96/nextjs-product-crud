@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { deleteProduct, TProduct } from "../services";
+import { deleteProduct, TProduct } from "../actions";
 import {
     Popover,
     PopoverContent,

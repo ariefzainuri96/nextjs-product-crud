@@ -1,5 +1,5 @@
 import React from "react";
-import { getAllProducts, TProduct } from "../services";
+import { getAllProducts, TProduct } from "../actions";
 import { ProductItem } from "../(components)/product-item";
 import { twMerge } from "tailwind-merge";
 
